@@ -10,8 +10,9 @@ CXXFLAGS := -Wall -O2 -c
 FPIC     := -fPIC
 SHARE    := -shared -o
 OBJ      := *.o
+cpp		 :=  -std=c++17
 
 $(TARGET) : $(HFILe) $(SRC)
-	$(CC) $(CXXFLAGS) $(FPIC) $(SRC) $(INC)
+	$(CC) -g $(CXXFLAGS) $(CPP_STD) $(FPIC) $(SRC) $(INC)
 	$(CC) $(SHARE) $(TARGET) $(OBJ) $(LINK)
 
