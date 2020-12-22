@@ -5,6 +5,7 @@
 
 LpcAnalyzer::LpcAnalyzer()
 	: Analyzer(),
+    mSettings(std::make_shared<LpcAnalyzerSettings>()),
 	mSimulationInitilized(false),
 	mLAD0(NULL),
 	mLAD1(NULL),
@@ -14,7 +15,6 @@ LpcAnalyzer::LpcAnalyzer()
 	mLFRAME(NULL)
 
 {
-    mSettings = std::make_shared<LpcAnalyzerSettings>();
 	SetAnalyzerSettings(mSettings.get());
 }
 

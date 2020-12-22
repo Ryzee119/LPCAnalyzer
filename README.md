@@ -35,9 +35,9 @@ The following features are implemented in a basic form:
 5. A DLL file will be generated which should be copied to the Kingst Analyzer folder.
 
 ### Linux 
-1. Download the SDK and simply clone this repo into the `KingstVIS_Analyzer_SDK` folder
-2. Browse the the `Linux` folder of this repo and type `make`. 
-3. Copy the `libLPC.so` copied to the KingstVIZ software `Analyzer` folder. 
+1. Browse the the `Linux` folder of this repo and type `make`. 
+2. Copy the `libLPC.so` copied to the KingstVIZ software `Analyzer` folder. 
 
 By Ryzee119
+
 Contributor b1ghamm3r
