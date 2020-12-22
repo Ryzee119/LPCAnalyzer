@@ -13,6 +13,6 @@ OBJ      := *.o
 cpp		 :=  -std=c++17
 
 $(TARGET) : $(HFILe) $(SRC)
-	$(CC) -g $(CXXFLAGS) $(CPP_STD) $(FPIC) $(SRC) $(INC)
+	$(CC) $(CXXFLAGS) $(CPP_STD) $(FPIC) $(SRC) $(INC)
 	$(CC) $(SHARE) $(TARGET) $(OBJ) $(LINK)
 
