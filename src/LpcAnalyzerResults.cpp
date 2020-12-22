@@ -4,10 +4,9 @@
 #include "LpcAnalyzerSettings.h"
 #include <iostream>
 #include <sstream>
+#include <string.h>
 
-#pragma warning(disable: 4996) //warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead.
-
-LpcAnalyzerResults::LpcAnalyzerResults(LpcAnalyzer *analyzer, LpcAnalyzerSettings *settings)
+LpcAnalyzerResults::LpcAnalyzerResults(LpcAnalyzer* analyzer, std::shared_ptr<LpcAnalyzerSettings> settings)
     :   AnalyzerResults(),
         mSettings(settings),
         mAnalyzer(analyzer)
@@ -17,9 +16,6 @@ LpcAnalyzerResults::LpcAnalyzerResults(LpcAnalyzer *analyzer, LpcAnalyzerSetting
 LpcAnalyzerResults::~LpcAnalyzerResults()
 {
 }
-
-
-
 
 void LpcAnalyzerResults::GenerateBubbleText(U64 frame_index, Channel& channel, DisplayBase display_base)    //unrefereced vars commented out to remove warnings.
 {
@@ -57,10 +53,10 @@ void LpcAnalyzerResults::GenerateBubbleText(U64 frame_index, Channel& channel, D
 					addressFrames[i] = GetFrame(frame_index + i);
 				}
 				//Addresses are Most Significant Nibble First as per LPC spec
-				U64 address = addressFrames[0].mData1 << 12 |
-					addressFrames[1].mData1 << 8 |
-					addressFrames[2].mData1 << 4 |
-					addressFrames[3].mData1 << 0;
+				uint32_t address = addressFrames[0].mData1 << 12 |
+                         addressFrames[1].mData1 << 8 |
+                         addressFrames[2].mData1 << 4 |
+                         addressFrames[3].mData1 << 0;
 				snprintf(bubble_str, 100, "Full Address (MSNibble First) 0x%04x", address);
 				AddResultString(bubble_str);
 			}
@@ -86,14 +82,14 @@ void LpcAnalyzerResults::GenerateBubbleText(U64 frame_index, Channel& channel, D
 					addressFrames[i] = GetFrame(frame_index + i);
 				}
 				//Addresses are Most Significant Nibble First as per LPC spec
-				U64 address = addressFrames[0].mData1 << 28 |
-					addressFrames[1].mData1 << 24 |
-					addressFrames[2].mData1 << 20 |
-					addressFrames[3].mData1 << 16 |
-					addressFrames[4].mData1 << 12 |
-					addressFrames[5].mData1 << 8 |
-					addressFrames[6].mData1 << 4 |
-					addressFrames[7].mData1 << 0;
+				uint32_t address = addressFrames[0].mData1 << 28 |
+                         addressFrames[1].mData1 << 24 |
+                         addressFrames[2].mData1 << 20 |
+                         addressFrames[3].mData1 << 16 |
+                         addressFrames[4].mData1 << 12 |
+                         addressFrames[5].mData1 << 8 |
+                         addressFrames[6].mData1 << 4 |
+                         addressFrames[7].mData1 << 0;
 
 				snprintf(bubble_str, 100, "Full Address (MSNibble First) 0x%08x", address);
 				AddResultString(bubble_str);
@@ -125,7 +121,7 @@ void LpcAnalyzerResults::GenerateBubbleText(U64 frame_index, Channel& channel, D
 					dataFrames[i] = GetFrame(frame_index + i);
 				}
 				//Data is sent out as the Least Significant Nibble First as per LPC spec
-				U64 data_byte = dataFrames[0].mData1 << 0 |	dataFrames[1].mData1 << 4;
+				uint32_t data_byte = dataFrames[0].mData1 << 0 |	dataFrames[1].mData1 << 4;
 				snprintf(bubble_str, 100, "Data byte (LSNibble First) 0x%02x", data_byte);
 				AddResultString(bubble_str);
 			}
@@ -234,7 +230,6 @@ void LpcAnalyzerResults::GenerateExportFile(const char *file, DisplayBase displa
 		LpcAnalyzer::LPC_STATE state = (LpcAnalyzer::LPC_STATE)frame.mData2;
 		if (state == LpcAnalyzer::LPC_STATE::START) {
 			char time_str[128];
-			char lpc_transaction[128];
 			AnalyzerHelpers::GetTimeString(frame.mStartingSampleInclusive, trigger_sample, sample_rate, time_str, 128);
 			S32 lpc_nibble_cnt = -1;
 			ss << time_str << ",";
@@ -242,7 +237,7 @@ void LpcAnalyzerResults::GenerateExportFile(const char *file, DisplayBase displa
 				Frame nextFrame = GetFrame(lpc_nibble_cnt + i + 1);
 				state = (LpcAnalyzer::LPC_STATE)nextFrame.mData2;
 				char nibble_str[128];
-				snprintf(nibble_str, 6, "0b%c%c%c%c", NIBBLE_TO_BINARY(nextFrame.mData1));
+				snprintf(nibble_str, 7, "0b%c%c%c%c", NIBBLE_TO_BINARY(nextFrame.mData1));
 				ss << nibble_str << ",";
 				lpc_nibble_cnt++;
 			}
@@ -316,10 +311,10 @@ void LpcAnalyzerResults::GenerateFrameTabularText(U64 frame_index, DisplayBase d
 			prevState != LpcAnalyzer::LPC_STATE::IO_WRITE_ADD) {
 			//IO Read/Write address are 4 nibbles long
 			//Addresses are Most Significant Nibble First as per LPC spec
-			U64 address = nextFrame[0].mData1 << 12 |
-				nextFrame[1].mData1 << 8 |
-				nextFrame[2].mData1 << 4 |
-				nextFrame[3].mData1 << 0;
+			uint32_t address = nextFrame[0].mData1 << 12 |
+				     nextFrame[1].mData1 << 8 |
+				     nextFrame[2].mData1 << 4 |
+				     nextFrame[3].mData1 << 0;
 			snprintf(tab_str, 100, "ADDRESS 0x%04x", address);
 			AddTabularText(tab_str);
 		}
@@ -334,14 +329,14 @@ void LpcAnalyzerResults::GenerateFrameTabularText(U64 frame_index, DisplayBase d
 			prevState != LpcAnalyzer::LPC_STATE::MEM_WRITE_ADD) {
 			//Mem Read/Write address are 8 nibbles long
 			//Addresses are Most Significant Nibble First as per LPC spec
-			U64 address = nextFrame[0].mData1 << 28 |
-				nextFrame[1].mData1 << 24 |
-				nextFrame[2].mData1 << 20 |
-				nextFrame[3].mData1 << 16 |
-				nextFrame[4].mData1 << 12 |
-				nextFrame[5].mData1 << 8 |
-				nextFrame[6].mData1 << 4 |
-				nextFrame[7].mData1 << 0;
+			uint32_t address = nextFrame[0].mData1 << 28 |
+                     nextFrame[1].mData1 << 24 |
+                     nextFrame[2].mData1 << 20 |
+                     nextFrame[3].mData1 << 16 |
+                     nextFrame[4].mData1 << 12 |
+                     nextFrame[5].mData1 << 8 |
+                     nextFrame[6].mData1 << 4 |
+                     nextFrame[7].mData1 << 0;
 
 			snprintf(tab_str, 100, "ADDRESS 0x%08x", address);
 			AddTabularText(tab_str);

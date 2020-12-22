@@ -1,6 +1,8 @@
 #ifndef LPC_ANALYZER_SETTINGS
 #define LPC_ANALYZER_SETTINGS
 
+#include <memory>
+
 #include <AnalyzerSettings.h>
 #include <AnalyzerTypes.h>
 
@@ -24,13 +26,13 @@ public:
     bool  mShowMarker;
 
 protected:
-    std::auto_ptr< AnalyzerSettingInterfaceChannel >    mLAD0ChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceChannel >    mLAD1ChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceChannel >    mLAD2ChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceChannel >    mLAD3ChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceChannel >    mLCLKChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceChannel >    mLFRAMEChannelInterface;
-    std::auto_ptr< AnalyzerSettingInterfaceBool >       mUseShowMarkerInterface;
+    std::shared_ptr<AnalyzerSettingInterfaceChannel >    mLAD0ChannelInterface;
+	std::shared_ptr< AnalyzerSettingInterfaceChannel >    mLAD1ChannelInterface;
+	std::shared_ptr< AnalyzerSettingInterfaceChannel >    mLAD2ChannelInterface;
+	std::shared_ptr< AnalyzerSettingInterfaceChannel >    mLAD3ChannelInterface;
+	std::shared_ptr< AnalyzerSettingInterfaceChannel >    mLCLKChannelInterface;
+	std::shared_ptr< AnalyzerSettingInterfaceChannel >    mLFRAMEChannelInterface;
+    std::shared_ptr< AnalyzerSettingInterfaceBool >       mUseShowMarkerInterface;
 };
 
 #endif //LPC_ANALYZER_SETTINGS
