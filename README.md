@@ -38,5 +38,6 @@ The following features are implemented in a basic form:
 1. Browse the the `Linux` folder of this repo and type `make`. 
 2. Copy the `libLPC.so` copied to the KingstVIZ software `Analyzer` folder. 
 
-- By Ryzee119
-- Contributor b1ghamm3r
+By Ryzee119
+
+Contributor b1ghamm3r
