@@ -1,6 +1,8 @@
 #ifndef LPC_ANALYZER_H
 #define LPC_ANALYZER_H
 
+#include <memory>
+
 #include <Analyzer.h>
 #include "LpcAnalyzerResults.h"
 #include "LpcSimulationDataGenerator.h"
@@ -11,6 +13,7 @@ class ANALYZER_EXPORT LpcAnalyzer : public Analyzer
 {
 public:
     LpcAnalyzer();
+
     virtual ~LpcAnalyzer();
     virtual void SetupResults();
     virtual void WorkerThread();
@@ -65,13 +68,14 @@ protected: //functions
     void GetLpcPacket();
 	AnalyzerResults::MarkerType mMarker;
 
+#ifdef _WIN32
+    #pragma warning( push )
+    #pragma warning( disable : 4251 ) //warning C4251: 'SerialAnalyzer::<...>' : class <...> needs to have dll-interface to be used by clients of class
+#endif
 
-
-#pragma warning( push )
-#pragma warning( disable : 4251 ) //warning C4251: 'SerialAnalyzer::<...>' : class <...> needs to have dll-interface to be used by clients of class
 protected:  //vars
-    std::auto_ptr< LpcAnalyzerSettings > mSettings;
-    std::auto_ptr< LpcAnalyzerResults > mResults;
+    std::shared_ptr<LpcAnalyzerSettings> mSettings;
+    std::shared_ptr<LpcAnalyzerResults> mResults;
     bool mSimulationInitilized;
     LpcSimulationDataGenerator mSimulationDataGenerator;
 
@@ -86,7 +90,10 @@ protected:  //vars
     AnalyzerResults::MarkerType mArrowMarker;
     std::vector<U64> mMarkerLocations;
 
-#pragma warning( pop )
+#ifdef _WIN32
+    #pragma warning( pop )
+#endif
+
 };
 
 extern "C" ANALYZER_EXPORT const char *__cdecl GetAnalyzerName();

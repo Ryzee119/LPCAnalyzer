@@ -5,14 +5,14 @@
 
 LpcAnalyzer::LpcAnalyzer()
 	: Analyzer(),
-	mSettings(new LpcAnalyzerSettings()),
+    mSettings(std::make_shared<LpcAnalyzerSettings>()),
 	mSimulationInitilized(false),
 	mLAD0(NULL),
 	mLAD1(NULL),
 	mLAD2(NULL),
 	mLAD3(NULL),
-	mLFRAME(NULL),
-	mLCLK(NULL)
+	mLCLK(NULL),
+	mLFRAME(NULL)
 
 {
 	SetAnalyzerSettings(mSettings.get());
@@ -25,7 +25,7 @@ LpcAnalyzer::~LpcAnalyzer()
 
 void LpcAnalyzer::SetupResults()
 {
-	mResults.reset(new LpcAnalyzerResults(this, mSettings.get()));
+	mResults = std::make_shared<LpcAnalyzerResults>(this, mSettings);
 	SetAnalyzerResults(mResults.get());
 
 	mResults->AddChannelBubblesWillAppearOn(mSettings->mLCLKChannel);
@@ -205,6 +205,7 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
+
 		case IO_READ_TAR:
 			if (clock_delay == 1) {
 				lpc_pos = IO_READ_SYNC;
@@ -214,6 +215,7 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
+
 		case IO_READ_SYNC:
 			if (lad_nibble == 0b0000) {
 				lpc_pos = IO_READ_DATA;
@@ -226,6 +228,7 @@ void LpcAnalyzer::GetLpcPacket()
 				}	
 			}
 			break;
+
 		case IO_READ_DATA:
 			if (clock_delay == 1) {
 				lpc_pos = TAR;
@@ -235,7 +238,6 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
-
 
 			/* IO WRITE */
 		case IO_WRITE_ADD:
@@ -247,6 +249,7 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
+
 		case IO_WRITE_DATA:
 			if (clock_delay == 1) {
 				lpc_pos = IO_WRITE_TAR;
@@ -256,6 +259,7 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
+
 		case IO_WRITE_TAR:
 			if (clock_delay == 1) {
 				lpc_pos = IO_WRITE_SYNC;
@@ -264,6 +268,7 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
+
 		case IO_WRITE_SYNC:
 			if (lad_nibble == 0b0000) {
 				lpc_pos = TAR;
@@ -278,8 +283,6 @@ void LpcAnalyzer::GetLpcPacket()
 			}
 			break;
 
-
-
 			/* MEMORY WRITE */
 		case MEM_WRITE_ADD:
 			if (clock_delay == 7) {
@@ -290,6 +293,7 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
+
 		case MEM_WRITE_DATA:
 			if (clock_delay == 1) {
 				lpc_pos = MEM_WRITE_TAR;
@@ -299,6 +303,7 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
+
 		case MEM_WRITE_TAR:
 			if (clock_delay == 1) {
 				lpc_pos = MEM_WRITE_SYNC;
@@ -307,6 +312,7 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
+
 		case MEM_WRITE_SYNC:
 			if (lad_nibble == 0b0000) {
 				lpc_pos = TAR;
@@ -331,6 +337,7 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
+
 		case MEM_READ_TAR:
 			if (clock_delay == 1) {
 				lpc_pos = MEM_READ_SYNC;
@@ -339,6 +346,7 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
+
 		case MEM_READ_SYNC:
 			if (lad_nibble == 0b0000) {
 				lpc_pos = MEM_READ_DATA;
@@ -352,6 +360,7 @@ void LpcAnalyzer::GetLpcPacket()
 				}
 			}
 			break;
+
 		case MEM_READ_DATA:
 			if (clock_delay == 1) {
 				lpc_pos = TAR;
@@ -362,7 +371,6 @@ void LpcAnalyzer::GetLpcPacket()
 			}
 			break;
 		
-		
 		case TAR:
 			if (clock_delay == 1) {
 				lpc_pos = COMPLETE;
@@ -372,7 +380,8 @@ void LpcAnalyzer::GetLpcPacket()
 				clock_delay++;
 			}
 			break;
-
+        default:
+            break;
 		}
 
 

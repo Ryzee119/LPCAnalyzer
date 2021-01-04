@@ -21,40 +21,37 @@ LpcAnalyzerSettings::LpcAnalyzerSettings()
 	mLCLKChannel.mChannelIndex = 4;
 	mLFRAMEChannel.mChannelIndex = 5;
 
-
-
-    mLAD0ChannelInterface.reset(new AnalyzerSettingInterfaceChannel());
+    mLAD0ChannelInterface = std::make_shared<AnalyzerSettingInterfaceChannel>();
 	mLAD0ChannelInterface->SetTitleAndTooltip("LAD0", "Multiplexed Command, Address, and Data");
 	mLAD0ChannelInterface->SetChannel(mLAD0Channel);
 	mLAD0ChannelInterface->SetSelectionOfNoneIsAllowed(false);
 
-	mLAD1ChannelInterface.reset(new AnalyzerSettingInterfaceChannel());
+	mLAD1ChannelInterface = std::make_shared<AnalyzerSettingInterfaceChannel>();
 	mLAD1ChannelInterface->SetTitleAndTooltip("LAD1", "Multiplexed Command, Address, and Data");
 	mLAD1ChannelInterface->SetChannel(mLAD1Channel);
 	mLAD1ChannelInterface->SetSelectionOfNoneIsAllowed(false);
 
-	mLAD2ChannelInterface.reset(new AnalyzerSettingInterfaceChannel());
+	mLAD2ChannelInterface = std::make_shared<AnalyzerSettingInterfaceChannel>();
 	mLAD2ChannelInterface->SetTitleAndTooltip("LAD2", "Multiplexed Command, Address, and Data");
 	mLAD2ChannelInterface->SetChannel(mLAD2Channel);
 	mLAD2ChannelInterface->SetSelectionOfNoneIsAllowed(false);
 
-	mLAD3ChannelInterface.reset(new AnalyzerSettingInterfaceChannel());
+	mLAD3ChannelInterface = std::make_shared<AnalyzerSettingInterfaceChannel>();
 	mLAD3ChannelInterface->SetTitleAndTooltip("LAD3", "Multiplexed Command, Address, and Data");
 	mLAD3ChannelInterface->SetChannel(mLAD3Channel);
 	mLAD3ChannelInterface->SetSelectionOfNoneIsAllowed(false);
 
-
-	mLFRAMEChannelInterface.reset(new AnalyzerSettingInterfaceChannel());
+	mLFRAMEChannelInterface = std::make_shared<AnalyzerSettingInterfaceChannel>();
 	mLFRAMEChannelInterface->SetTitleAndTooltip("LFRAME", "Indicates start of a new cycle, termination of broken cycle.");
 	mLFRAMEChannelInterface->SetChannel(mLFRAMEChannel);
 	mLFRAMEChannelInterface->SetSelectionOfNoneIsAllowed(false);
 
-	mLCLKChannelInterface.reset(new AnalyzerSettingInterfaceChannel());
+	mLCLKChannelInterface = std::make_shared<AnalyzerSettingInterfaceChannel>();
 	mLCLKChannelInterface->SetTitleAndTooltip("LCLK", "33Mhz LPC Clock.");
 	mLCLKChannelInterface->SetChannel(mLCLKChannel);
 	mLCLKChannelInterface->SetSelectionOfNoneIsAllowed(false);
 
-	mUseShowMarkerInterface.reset(new AnalyzerSettingInterfaceBool());
+	mUseShowMarkerInterface = std::make_shared<AnalyzerSettingInterfaceBool>();
 	mUseShowMarkerInterface->SetTitleAndTooltip("", "Show decode marker or not");
 	mUseShowMarkerInterface->SetCheckBoxText("Show Decode Marker");
 	mUseShowMarkerInterface->SetValue(mShowMarker);
@@ -78,8 +75,6 @@ LpcAnalyzerSettings::LpcAnalyzerSettings()
 	AddChannel(mLAD3Channel, "LAD3", false);
 	AddChannel(mLCLKChannel, "LCLK", false);
 	AddChannel(mLFRAMEChannel, "LFRAME", false);
-
-
 }
 
 LpcAnalyzerSettings::~LpcAnalyzerSettings()

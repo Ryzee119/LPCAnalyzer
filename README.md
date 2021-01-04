@@ -34,7 +34,10 @@ The following features are implemented in a basic form:
 4. Set build properties to Release and x64/x86. This has been tested mainly on x64 build.
 5. A DLL file will be generated which should be copied to the Kingst Analyzer folder.
 
-### Linux (Untested)
-1. Browse the the `Linux` folder then type `make`. This will generate a suitable lib to be copied to the Kingst analyser folder.
+### Linux 
+1. Browse the the `Linux` folder of this repo and type `make`. 
+2. Copy the `libLPC.so` copied to the KingstVIZ software `Analyzer` folder. 
 
 By Ryzee119
+
+Contributor b1ghamm3r
